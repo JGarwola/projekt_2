@@ -2,6 +2,7 @@
 
 import numpy as np
 import random
+import mogli
 
 N = 50
 R = 10
@@ -16,6 +17,7 @@ class atom:
         self.pozycja = pozycja
         self.h = h
         self.sigma = (N*(4/3)* 3.1415 *r**3)/( 3.1415 *(R**2)*self.h)
+        
     #WYPISANIE LINIJKI W FORACIE JAK DO PLIKU XYZ    
     def __str__(self):
         return ( element + " " + str(self.pozycja[0]) + " "
@@ -26,11 +28,12 @@ class populacja():
         self.atomy = atomy
         
         #TUTAJ BEDZIE MOZNA ZAIMPLEMENTOWAC LOSOWANIE POLOZEN
-        #NARAZIE WSPOLZEDNE SA 0 0 i
-        pierwszy = atom(pozycja = np.array( [0,0,0]) )
-        self.atomy.append(pierwszy)
+        #NARAZIE WSPOLZEDNE PRZYPADKOWE, FORMAT WYMAGA 5 MIEJSC PO PRZECINKU
         for i in range(N):
-            a = atom( pozycja = np.array( [0,0,i] ) )
+            x = format(random.uniform(-5,5),'.5f')
+            y = format(random.uniform(-5,5),'.5f')
+            z = format(random.uniform(-5,5),'.5f')
+            a = atom( pozycja = np.array( [x,y,z] ) )
             self.atomy.append( a )
       
     #PRZEKSZTALCA LISTE ATOMY W TEKST GOTOWY DO WKLEJENIA DO PLIKU
@@ -40,14 +43,16 @@ class populacja():
             tekst = ( tekst + "\n" + str(element) )
         return tekst
     
+    #'{0:s},{1:f}x,{2:f}y,{3:f}z\n'.format('Ar',x[i],y[i],z)
+    
     def zapisz(self,nazwa_pliku):
-        fout = open(nazwa_pliku,'w')
+        fout = open(nazwa_pliku,"w+")
         fout.write(self.dane())
         fout.close()
-        
-a = atom(pozycja = [0,0,0])
-print(a)
-        
+         
 p = populacja()
-print(p.dane())
+#print(p.dane())
 p.zapisz("dane.xyz")
+
+molecules = mogli.read('dane.xyz')
+mogli.show(molecules[0])
