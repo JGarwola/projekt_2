@@ -127,4 +127,4 @@ print("h =",h, "V =", 2*m.pi*r*h,"sigma =",sigma)
 p.zapisz("dane.xyz")
 
 molecules = mogli.read('dane.xyz')
-mogli.show(molecules[0])
+mogli.show(molecules[0],bonds_param=d_max)
